@@ -1,5 +1,7 @@
 package com.blog.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -10,9 +12,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@Table(name = "user")
+@Entity
 public class User {
 
+@Id
 private int userId;
 private String userName;
 private String userEmail;
