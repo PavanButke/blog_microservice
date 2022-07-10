@@ -62,7 +62,17 @@ public class UserServiceImpl implements UserService {
 		
 		userRepository.deleteById(userId);
 	}
-	
+
+	@Override
+	public List<UserDto> getByUserEmail(String userEmail) {
+		List<User> users= userRepository.mails(userEmail);
+		List<UserDto> userDtos = new ArrayList<UserDto>();
+		
+		for(User user: users) {
+			userDtos.add(modelMapper.map(user, UserDto.class));
+		}
+		return userDtos;
+	}
 }
 
 

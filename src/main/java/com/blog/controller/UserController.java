@@ -62,4 +62,10 @@ public class UserController {
 		 return new  ResponseEntity<String>("Hey , you just deleted an user!",HttpStatus.OK);
 	}
 	
+	@GetMapping("/users/mail/{userEmail}")
+	public ResponseEntity<List<UserDto>> getByUserEmail(@PathVariable("userEmail") String userEmail) {
+		return new ResponseEntity<List<UserDto>>(userService.getByUserEmail(userEmail) , HttpStatus.OK);	
+
+	}
+	
 }
