@@ -37,7 +37,7 @@ public class UserController {
 	@GetMapping(value="/users", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<List<UserDto>> allUser(@RequestParam(value="pageNumber",required=false ,defaultValue = "0")int pageNumber ,
-			@RequestParam(value="pageSize" , required=false ,defaultValue = "0") int pageSize,
+			@RequestParam(value="pageSize" , required=false, defaultValue = "2" ) int pageSize,
 			@RequestParam(value="order", required=false ,defaultValue = "true") boolean  order,
 			@RequestParam(value ="sort", required=false , defaultValue = "userName") String... properties) {
 
@@ -52,7 +52,7 @@ public class UserController {
 		return new ResponseEntity<UserDto>(userService.postUser(user), HttpStatus.CREATED);
 	}
 	
-	@PutMapping(value="/users/userId",  produces = { MediaType.APPLICATION_JSON_VALUE,
+	@PutMapping(value="/users/{userId}",  produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<String>  updateUser(@PathVariable("userId") int userId,@RequestBody UserDto user) {
 		 userService.updateUser(userId, user);

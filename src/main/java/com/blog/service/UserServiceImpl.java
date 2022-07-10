@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import com.blog.dao.UserRepository;
 import com.blog.dto.UserDto;
 import com.blog.entities.User;
+import com.blog.exceptions.NoSuchElementExists;
+import com.blog.exceptions.UserAlreadyExists;
 
 
 
@@ -27,8 +29,10 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public UserDto getUser(int userId) {
-		User user= userRepository.findById(userId).get();
-
+		User user= userRepository.findById(userId).orElse(null);
+		if(user == null)
+			throw new NoSuchElementExists("This user not available!");
+		
 		return modelMapper.map(user, UserDto.class) ;
 	}
 
@@ -49,17 +53,29 @@ public class UserServiceImpl implements UserService {
 	public UserDto postUser(UserDto userDto) {
 		User user = modelMapper.map(userDto, User.class);
 		
-		User newUser = userRepository.save(user);
+		User getUser= userRepository.findById(user.getUserId()).orElse(null);
+		if(getUser == null) {
+			User insertedUser= userRepository.save(user);
+			// return mapToDto(insertedCoupon);
+			return modelMapper.map(insertedUser, UserDto.class);
+		}
+		else
+			throw new UserAlreadyExists("This user entry exists already!");
+
 		
-		return modelMapper.map(newUser, UserDto.class);
+		
 	}
 	@Override
 	public UserDto updateUser(int userId, UserDto userDto) {
-			User user = modelMapper.map(userDto, User.class);
-			
-			User newUser = userRepository.save(user);
-			
-			return modelMapper.map(newUser, UserDto.class);
+		User  myUser = userRepository.findById(userId).orElse(null);
+		
+		if(myUser==null)
+			throw new NoSuchElementExists("User Is Not Available!");
+		
+		User user= modelMapper.map(userDto, User.class);
+
+		userRepository.save(user);
+		return userDto;
 	}
 
 	@Override
