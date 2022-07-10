@@ -7,6 +7,9 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.UserRepository;
@@ -30,10 +33,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDto> allUser() {
-		List<User> userList = userRepository.findAll();
+	public List<UserDto> allUser(int pageNumber , int pageSize, boolean order, String... properties) {
+		//List<User> userList = userRepository.findAll();
 		List<UserDto> dtoUser = new ArrayList<UserDto>();
-		for(User user : userList ) {
+		Page<User> listOfUser = userRepository.findAll(PageRequest.of(pageNumber, pageSize , order?Direction.ASC:Direction.DESC , properties));
+		List<User> content = listOfUser.getContent();
+		for(User user : content ) {
 			dtoUser.add(modelMapper.map(user , UserDto.class));
 		}
 		

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.dto.UserDto;
@@ -35,9 +36,12 @@ public class UserController {
 	
 	@GetMapping(value="/users", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
-	public List<UserDto> allUser() {
-	return userService.allUser();
-		
+	public ResponseEntity<List<UserDto>> allUser(@RequestParam(value="pageNumber",required=false ,defaultValue = "0")int pageNumber ,
+			@RequestParam(value="pageSize" , required=false ,defaultValue = "0") int pageSize,
+			@RequestParam(value="order", required=false ,defaultValue = "true") boolean  order,
+			@RequestParam(value ="sort", required=false , defaultValue = "userName") String... properties) {
+
+		return new ResponseEntity<List<UserDto>>(userService.allUser(pageNumber, pageSize, order, properties),HttpStatus.OK);
 	}
 	
 	

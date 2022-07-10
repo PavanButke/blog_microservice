@@ -11,7 +11,7 @@ public interface UserService {
 	
 	public UserDto getUser(int userId);
 	
-	public List<UserDto> allUser();
+	public List<UserDto> allUser(int pageNumber, int pageSize , boolean order , String... properties);
 
 	public UserDto postUser(UserDto userDto);
 	
