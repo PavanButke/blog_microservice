@@ -2,20 +2,20 @@ package com.blog.service;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import com.blog.dto.UserDto;
 import com.blog.entities.User;
+
 
 public interface UserService {
 	
-	public User getUser(int userId);
+	public UserDto getUser(int userId);
 	
-	public List<User> allUser();
+	public List<UserDto> allUser();
 
-	public User postUser(User user);
+	public UserDto postUser(UserDto userDto);
 	
-	public User updateUser( int userId, User user);
+	public UserDto updateUser( int userId, UserDto userDto);
 	
 	public void deleteUser(int userId);
 

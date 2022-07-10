@@ -1,52 +1,72 @@
 package com.blog.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.blog.dao.UserRepository;
+import com.blog.dto.UserDto;
 import com.blog.entities.User;
+
+
 
 @Service
 public class UserServiceImpl implements UserService {
-	
 	@Autowired
 	private UserRepository userRepository;
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public User getUser(int userId) {
-		
-		return userRepository.getById(userId);
-	}
-
-	@Override
-	public List<User> allUser() {
+	@Autowired
+	private ModelMapper modelMapper;
 	
-		return userRepository.findAll();
+	@Override
+	public UserDto getUser(int userId) {
+		User user= userRepository.findById(userId).get();
+
+		return modelMapper.map(user, UserDto.class) ;
 	}
 
 	@Override
-	public User postUser(User user) {
-	
-		return userRepository.save(user);
-	}
-
-	@Override
-	public User updateUser(int userId, User user) {
+	public List<UserDto> allUser() {
+		List<User> userList = userRepository.findAll();
+		List<UserDto> dtoUser = new ArrayList<UserDto>();
+		for(User user : userList ) {
+			dtoUser.add(modelMapper.map(user , UserDto.class));
+		}
 		
-		return userRepository.save(user);
+		return dtoUser;
+	}
+
+	@Override
+	public UserDto postUser(UserDto userDto) {
+		User user = modelMapper.map(userDto, User.class);
+		
+		User newUser = userRepository.save(user);
+		
+		return modelMapper.map(newUser, UserDto.class);
+	}
+	@Override
+	public UserDto updateUser(int userId, UserDto userDto) {
+			User user = modelMapper.map(userDto, User.class);
+			
+			User newUser = userRepository.save(user);
+			
+			return modelMapper.map(newUser, UserDto.class);
 	}
 
 	@Override
 	public void deleteUser(int userId) {
-	
-		 
-		 userRepository.deleteById(userId);
+		
+		userRepository.deleteById(userId);
 	}
+	
+}
+
 
 
 	
 
-}
+
