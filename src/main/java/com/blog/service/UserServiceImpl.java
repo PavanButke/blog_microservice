@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 		User getUser= userRepository.findById(user.getUserId()).orElse(null);
 		if(getUser == null) {
 			User insertedUser= userRepository.save(user);
-			// return mapToDto(insertedCoupon);
+		
 			return modelMapper.map(insertedUser, UserDto.class);
 		}
 		else
